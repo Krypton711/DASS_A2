@@ -31,9 +31,15 @@
 | `test_player_money_management` | Add/deduct negative/positive | `amount` edge cases | Tests ValueError for negative values and `is_bankrupt` logic. | None |
 | `test_player_movement_and_go` | Move across GO threshold | `position` wrap-around | Tests whether passing GO awards the salary correctly. | Found that `move` only awarded salary on exactly 0, not when passing GO! |
 | `test_player_properties` | Duplicate add/remove | `properties` list state | Ensures list operations handle existing/missing items safely. | None |
+| `test_get_tile_type` | Query all different tiles | `position` edge cases | Identifies all branches of standard and unexpected tiles. | The tile returned `blank` instead of `unknown` for utilities because they are not initialized. |
+| `test_is_purchasable` | Unowned, owned, mortgaged, none | `property` state | Ensures property availability branches work across 4 paths. | None |
+| `test_game_buy_property` | Player buys vs cannot afford | `balance` state | Covers the branches for property purchase affordability. | The affordability check was `<=` preventing exact amount purchases! |
+| `test_doubles_speeding` | Roll 3 doubles in a row | `doubles_streak` state | Tests the speeding to jail loop and exit conditions. | Player moved and resolved tile on the 3rd double before going to jail! |
 
 ### Corrected Errors (Commits)
 - Error 1: Fixed `give_loan` in `bank.py` not deducting from bank reserves.
 - Error 2: Fixed `dice.py` rolling 1 to 5 instead of 1 to 6 for six-sided dice.
 - Error 3: Fixed `PropertyGroup.all_owned_by` in `property.py` using `any()` instead of `all()`.
 - Error 4: Fixed `player.move` to award GO_SALARY when passing GO, not just landing exactly on it.
+- Error 5: Fixed Game `play_turn` executing move on 3rd double before sending to jail.
+- Error 6: Fixed `buy_property` in `game.py` rejecting purchase when player has exactly the property price.

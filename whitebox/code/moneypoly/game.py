@@ -56,9 +56,10 @@ class Game:
 
         # Three consecutive doubles sends a player to jail
         if self.dice.doubles_streak >= 3:
-            print(f"  {player.name} rolled doubles three times in a row — go to jail!")
+            print("  Speeding! 3 doubles in a row. Go to jail!")
             player.go_to_jail()
-            self.advance_turn()
+            self.dice.doubles_streak = 0
+            self.current_index = (self.current_index + 1) % len(self.players)
             return
 
         self._move_and_resolve(player, roll)
@@ -66,9 +67,9 @@ class Game:
         # Rolling doubles earns an extra turn
         if self.dice.is_doubles():
             print(f"  Doubles! {player.name} rolls again.")
-            return
-
-        self.advance_turn()
+            self.play_turn()
+        else:
+            self.advance_turn()
 
     def _move_and_resolve(self, player, steps):
         """Move `player` by `steps` and trigger whatever tile they land on."""
@@ -132,11 +133,8 @@ class Game:
             self.pay_rent(player, prop)
 
     def buy_property(self, player, prop):
-        """
-        Purchase `prop` on behalf of `player`.
-        Returns True on success, False if the player cannot afford it.
-        """
-        if player.balance <= prop.price:
+        """Handle a direct purchase of an unowned property."""
+        if player.balance < prop.price:
             print(f"  {player.name} cannot afford {prop.name} (${prop.price}).")
             return False
         player.deduct_money(prop.price)
