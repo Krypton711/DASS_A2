@@ -25,7 +25,11 @@
 | `test_dice_rolls_valid_range` | Roll dice 100 times | Iterative large input | Checks if face values conform to 6-sided dice logic. | The dice were rolling `randint(1, 5)` instead of 1 to 6! |
 | `test_doubles_streak` | Roll consecutive doubles then non-double | Doubles branch logic | Covers `is_doubles()` true and false branches and streak reset. | None |
 | `test_dice_describe` | Describe rolls with/without doubles | String formatting | Covers the conditional branch in the describe string. | None |
+| `test_property_rent_calculation` | Mixed ownership vs Full ownership | `group.all_owned_by` branch | Verifies rent doubling logic and mortgage rent logic. | `all_owned_by` was using `any()` instead of `all()`, making single ownership trigger double rent! |
+| `test_property_mortgage_unmortgage` | Double mortgage/unmortgage | `is_mortgaged` state | Verifies early returns and correct cost calculations. | None |
+| `test_property_is_available` | Check unowned, owned, and mortgaged | `owner` and `is_mortgaged` states | Covers all combinations of availability checks. | None |
 
 ### Corrected Errors (Commits)
 - Error 1: Fixed `give_loan` in `bank.py` not deducting from bank reserves.
 - Error 2: Fixed `dice.py` rolling 1 to 5 instead of 1 to 6 for six-sided dice.
+- Error 3: Fixed `PropertyGroup.all_owned_by` in `property.py` using `any()` instead of `all()`.
