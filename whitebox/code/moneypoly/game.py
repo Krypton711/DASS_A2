@@ -1,3 +1,4 @@
+"""Game module for MoneyPoly."""
 from moneypoly.config import (
     JAIL_FINE,
     AUCTION_MIN_INCREMENT,

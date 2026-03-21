@@ -1,3 +1,4 @@
+"""Cards module for Chance and Community Chest."""
 import random
 
 CHANCE_CARDS = [

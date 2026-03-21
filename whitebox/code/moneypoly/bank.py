@@ -1,6 +1,8 @@
+"""Bank module for MoneyPoly."""
 from moneypoly.config import BANK_STARTING_FUNDS
 
 class Bank:
+    """Bank class handling funds and loans."""
     def __init__(self):
         self._funds = BANK_STARTING_FUNDS
         self._loans_issued = []

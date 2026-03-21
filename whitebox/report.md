@@ -8,7 +8,8 @@
 | Iteration | Changes Made |
 | :--- | :--- |
 | Iteration 1: Fix unused vars and imports | Removed unused imports (sys, os, math, etc) and `old_position` variable. |
-| Iteration 2: <What You Changed> | |
+| Iteration 2: Add missing docstrings | Added module docstrings to 9 files and class docstrings to Bank, PropertyGroup. |
+| Iteration 3: Formatting and syntax | |
 
 ## 1.3 White Box Test Cases
 

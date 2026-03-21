@@ -1,3 +1,4 @@
+"""Dice module for MoneyPoly."""
 import random
 
 class Dice:
