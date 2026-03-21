@@ -26,3 +26,23 @@
   - Body: `{"name": "John", "phone": "abcdefghij"}`
 - **Expected result**: Status `400 Bad Request` based on API rule "The phone number must be exactly 10 digits."
 - **Actual result observed**: Status `200 OK`. The system accepted a 10-character string of letters instead of validating that it contains only numeric digits.
+
+**Bug 2: Pincode Datatype Validation Missing**
+- **Endpoint tested**: `POST /api/v1/addresses`
+- **Request payload**:
+  - Method: `POST`
+  - URL: `http://localhost:8080/api/v1/addresses`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+  - Body: `{"label": "HOME", "street": "123 Main St", "city": "Springfield", "pincode": "abcdef", "is_default": true}`
+- **Expected result**: Status `400 Bad Request` based on API rule "The pincode must be exactly 6 digits."
+- **Actual result observed**: Status `200 OK`. The system accepted a 6-character string of alphabetical letters instead of validating that it was strictly numeric digits.
+
+**Bug 3: Default Address Override Failed**
+- **Endpoint tested**: `POST /api/v1/addresses`
+- **Request payload**:
+  - Method: `POST`
+  - URL: `http://localhost:8080/api/v1/addresses`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+  - Body: `{"label": "OFFICE", "street": "Street 2", "city": "City", "pincode": "222222", "is_default": true}` *(Called after another address was already set to default)*
+- **Expected result**: The newly created address should be the unique default, and all pre-existing addresses marked `is_default: true` should have it set to `false`.
+- **Actual result observed**: The historical address retained its `is_default: true` flag, creating conflicting defaults in the database.
