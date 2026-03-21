@@ -83,3 +83,33 @@
   - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
 - **Expected result**: The GET endpoint should return a `"discount"` variable denoting the sum saved.
 - **Actual result observed**: Handlers threw `KeyError: 'discount'`, demonstrating the server completely omits providing this required structural UI field back to the caller.
+
+**Bug 8: COD Payments Logged as PAID Initially**
+- **Endpoint tested**: `POST /api/v1/checkout`
+- **Request payload**:
+  - Method: `POST` Checkout Cart
+  - URL: `http://localhost:8080/api/v1/checkout`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+  - Body: `{"payment_method": "COD", "address_id": 1}`
+- **Expected result**: Dictionary payload sets `"payment_status": "PENDING"`.
+- **Actual result observed**: The system forced `"payment_status": "PAID"`, defeating the purpose of Cash on Delivery protocols entirely.
+
+**Bug 9: Missing Single Deposit Threshold for Wallets**
+- **Endpoint tested**: `POST /api/v1/wallet/add`
+- **Request payload**:
+  - Method: `POST` Adding Funds
+  - URL: `http://localhost:8080/api/v1/wallet/add`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+  - Body: `{"amount": 5001}`
+- **Expected result**: Status `400 Bad Request` according to "A user cannot add an amount greater than 5000 in a single request."
+- **Actual result observed**: Status `200 OK`. Rule enforcement is functionally absent.
+
+**Bug 10: Missing Absolute Global Wallet Cap Enforcement**
+- **Endpoint tested**: `POST /api/v1/wallet/add`
+- **Request payload**:
+  - Method: `POST` Sequentially over-depositing beyond $10,000 threshold.
+  - URL: `http://localhost:8080/api/v1/wallet/add`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+  - Body: `{"amount": 4000}` run sequentially 4 times.
+- **Expected result**: Status `400 Bad Request` once the user's total active sum exceeds $10,000.
+- **Actual result observed**: Status `200 OK`. Accounts can balloon well past $10,000.
