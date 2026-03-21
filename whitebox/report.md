@@ -18,9 +18,11 @@
 ### Test Cases Justification
 | Test Case | Scenario | Variables/Edge Cases | Reason for Inclusion | Errors/Issues Found |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | | | | |
-| 2 | | | | |
+| `test_give_loan_reduces_funds` | Bank issues a loan | `amount` > 0 | Validates control flow of `give_loan`. | `self._funds` didn't decrease when issuing loans. |
+| `test_payout_insufficient_funds` | Bank pays out more than reserves | `amount` > `self._funds` | Validates boundary check array. | None |
+| `test_negative_payout_and_loan` | Zero or negative amounts | `amount` <= 0 | Validates early returns on Edge Cases. | None |
+| `test_collect_funds` | Bank collects funds | `amount` > 0 | Validates basic inflow. | None |
 
 ### Corrected Errors (Commits)
-- Error 1: <What You Changed>
+- Error 1: Fixed `give_loan` in `bank.py` not deducting from bank reserves.
 - Error 2: <What You Changed>
