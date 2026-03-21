@@ -22,7 +22,10 @@
 | `test_payout_insufficient_funds` | Bank pays out more than reserves | `amount` > `self._funds` | Validates boundary check array. | None |
 | `test_negative_payout_and_loan` | Zero or negative amounts | `amount` <= 0 | Validates early returns on Edge Cases. | None |
 | `test_collect_funds` | Bank collects funds | `amount` > 0 | Validates basic inflow. | None |
+| `test_dice_rolls_valid_range` | Roll dice 100 times | Iterative large input | Checks if face values conform to 6-sided dice logic. | The dice were rolling `randint(1, 5)` instead of 1 to 6! |
+| `test_doubles_streak` | Roll consecutive doubles then non-double | Doubles branch logic | Covers `is_doubles()` true and false branches and streak reset. | None |
+| `test_dice_describe` | Describe rolls with/without doubles | String formatting | Covers the conditional branch in the describe string. | None |
 
 ### Corrected Errors (Commits)
 - Error 1: Fixed `give_loan` in `bank.py` not deducting from bank reserves.
-- Error 2: <What You Changed>
+- Error 2: Fixed `dice.py` rolling 1 to 5 instead of 1 to 6 for six-sided dice.
