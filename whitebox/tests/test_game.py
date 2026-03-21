@@ -37,3 +37,22 @@ def test_doubles_speeding():
             
     assert player.in_jail is True
     assert player.position == 10
+
+def test_game_winner_logic():
+    """Test that the game correctly identifies the player with the highest net worth."""
+    game = Game(["P1", "P2"])
+    
+    # Give P2 more money
+    game.players[0].balance = 100
+    game.players[1].balance = 500
+    
+    # Fast forward turns so game ends immediately without playing
+    from moneypoly.config import MAX_TURNS
+    game.turn_number = MAX_TURNS
+    
+    with patch('builtins.print') as mock_print:
+        with patch('moneypoly.ui.print_banner'):
+            game.run()
+    
+    # P2 (highest) should be printed as the winner
+    mock_print.assert_any_call("\n  P2 wins with a net worth of $500!\n")

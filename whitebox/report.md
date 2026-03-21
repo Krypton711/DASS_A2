@@ -35,6 +35,8 @@
 | `test_is_purchasable` | Unowned, owned, mortgaged, none | `property` state | Ensures property availability branches work across 4 paths. | None |
 | `test_game_buy_property` | Player buys vs cannot afford | `balance` state | Covers the branches for property purchase affordability. | The affordability check was `<=` preventing exact amount purchases! |
 | `test_doubles_speeding` | Roll 3 doubles in a row | `doubles_streak` state | Tests the speeding to jail loop and exit conditions. | Player moved and resolved tile on the 3rd double before going to jail! |
+| `test_game_winner_logic` | Compare two players' net worth | Game end variables | Ensures the final game evaluation picks the highest score. | Used `min()` instead of `max()`, making the poorest player win! |
+| `test_player_net_worth` | Tally mortgaged, unmortgaged, and cash | `properties` branch | Determines if property values (active and mortgaged) augment net worth. | Net worth only returned raw balance instead of including property value! |
 
 ### Corrected Errors (Commits)
 - Error 1: Fixed `give_loan` in `bank.py` not deducting from bank reserves.
@@ -43,3 +45,5 @@
 - Error 4: Fixed `player.move` to award GO_SALARY when passing GO, not just landing exactly on it.
 - Error 5: Fixed Game `play_turn` executing move on 3rd double before sending to jail.
 - Error 6: Fixed `buy_property` in `game.py` rejecting purchase when player has exactly the property price.
+- Error 7: Fixed `game.py` awarding the win to the player with the minimum net worth instead of maximum.
+- Error 8: Fixed `player.net_worth` computing logic to correctly include mortgaged and unmortgaged property assets.

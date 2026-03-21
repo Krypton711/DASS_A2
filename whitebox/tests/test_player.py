@@ -62,3 +62,21 @@ def test_player_properties():
     # Remove again shouldn't crash
     player.remove_property(prop)
     assert player.count_properties() == 0
+
+def test_player_net_worth():
+    """Test net worth includes balance, unmortgaged properties (full price) and mortgaged properties (mortgage value)."""
+    player = Player("P1", balance=100)
+    prop1 = Property("P1", 1, 200, 20)
+    prop2 = Property("P2", 2, 300, 30)
+    
+    player.add_property(prop1)
+    player.add_property(prop2)
+    
+    payout = prop2.mortgage()
+    player.add_money(payout)
+    
+    # balance = 100 + 150 (from mortgage) = 250
+    # prop1 (unmortgaged) = 200
+    # prop2 (mortgaged) = 150
+    # total net worth = 250 + 200 + 150 = 600
+    assert player.net_worth() == 600
