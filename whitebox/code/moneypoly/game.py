@@ -220,6 +220,8 @@ class Game:
         highest_bid = 0
         highest_bidder = None
 
+        # For simplicity, all players can bid in a single round.
+        # A more complex auction would involve multiple bidding rounds.
         for player in self.players:
             print(f"  {player.name}'s bid (balance: ${player.balance}, "
                   f"current high: ${highest_bid}):")
@@ -471,6 +473,10 @@ class Game:
             return
         chosen_prop = player.properties[pidx]
         cash = ui.safe_int_input(
-            f"  Cash to receive from {partner.name}: $", default=0
+            f"  Cash to ask for {chosen_prop.name}: ", default=0
         )
-        self.trade(player, partner, chosen_prop, cash)
+        if cash < 0:
+            print("  Cash amount cannot be negative.")
+            return
+
+        print(f"  Proposing trade to {partner.name}: {chosen_prop.name} for ${cash}.")

@@ -67,7 +67,7 @@ def safe_int_input(prompt, default=0):
     """
     try:
         return int(input(prompt))
-    except ValueError:
+    except (ValueError, EOFError, KeyboardInterrupt):
         return default
 
 
