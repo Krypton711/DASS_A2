@@ -113,3 +113,31 @@
   - Body: `{"amount": 4000}` run sequentially 4 times.
 - **Expected result**: Status `400 Bad Request` once the user's total active sum exceeds $10,000.
 - **Actual result observed**: Status `200 OK`. Accounts can balloon well past $10,000.
+
+**Bug 11: Orders Privacy Enforcement Yields 404**
+- **Endpoint tested**: `GET /api/v1/orders/{order_id}`
+- **Request payload**:
+  - Method: `GET` User 2 requesting User 1's Order
+  - URL: `http://localhost:8080/api/v1/orders/{order_id}`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '2'}`
+- **Expected result**: Status `403 Forbidden` according to "If they try to view an order that belongs to another user, the server must return a 403 error."
+- **Actual result observed**: Status `404 Not Found`.
+
+**Bug 12: Missing Add Review POST Endpoint**
+- **Endpoint tested**: `POST /api/v1/products/{product_id}/reviews/add`
+- **Request payload**:
+  - Method: `POST` Adding product review
+  - URL: `http://localhost:8080/api/v1/products/1/reviews/add`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+  - Body: `{"rating": 4, "review_text": "Good"}`
+- **Expected result**: Status codes `200` or `400` depending on input values and bounds validations.
+- **Actual result observed**: Status `404 Not Found`. The endpoint is completely unimplemented or improperly routed.
+
+**Bug 13: Support Tickets APIs Entirely Unimplemented**
+- **Endpoint tested**: `GET /api/v1/tickets` and `POST /api/v1/tickets/create`
+- **Request payload**:
+  - Method: `GET` and `POST`
+  - URL: `http://localhost:8080/api/v1/tickets/create`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+- **Expected result**: Status `200 OK` or structural rule validation responses.
+- **Actual result observed**: Status `404 Not Found`. The Support Tickets logic mapping is absent from the API.
