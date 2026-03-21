@@ -10,7 +10,8 @@
 | Iteration 1: Fix unused vars and imports | Removed unused imports (sys, os, math, etc) and `old_position` variable. |
 | Iteration 2: Add missing docstrings | Added module docstrings to 9 files and class docstrings to Bank, PropertyGroup. |
 | Iteration 3: Formatting and syntax | Added trailing newlines to player.py and game.py. Removed unnecessary parens in game.py and reformatted dictionaries in cards.py to avoid long lines. |
-| Iteration 4: Logical and best practices | |
+| Iteration 4: Logical and best practices | Replaced bare except in ui.py, fixed truthiness comparison in board.py, removed unnecessary else in property.py, fixed redundant f-string and elif in game.py. |
+| Iteration 5: Refactoring | |
 
 ## 1.3 White Box Test Cases
 
