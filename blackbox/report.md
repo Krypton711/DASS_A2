@@ -65,3 +65,21 @@
   - Body: `{"product_id": 1, "quantity": 0}` (Also tested `-5`)
 - **Expected result**: Status `400 Bad Request` based on API rule "When adding an item, the quantity must be at least 1. Sending 0 or a negative number must be rejected."
 - **Actual result observed**: Status `200 OK`. Internal validation limits missing entirely on addition quantities.
+
+**Bug 6: Cart Total Sum Always Asserts ZERO**
+- **Endpoint tested**: `GET /api/v1/cart`
+- **Request payload**:
+  - Method: `POST` Add Item (Price 120), then `GET` Cart
+  - URL: `http://localhost:8080/api/v1/cart`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+- **Expected result**: Cart dictionary contains `"total": 120`.
+- **Actual result observed**: The API forcibly returned `"total": 0`. The iteration logic for calculating total across dynamic cart configurations is completely broken, triggering downstream coupon validation failures.
+
+**Bug 7: Absence of Discount Payload Return Field**
+- **Endpoint tested**: `GET /api/v1/cart`
+- **Request payload**:
+  - Method: `POST` `/coupon/apply` with valid Code, then `GET` `/cart`
+  - URL: `http://localhost:8080/api/v1/cart`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+- **Expected result**: The GET endpoint should return a `"discount"` variable denoting the sum saved.
+- **Actual result observed**: Handlers threw `KeyError: 'discount'`, demonstrating the server completely omits providing this required structural UI field back to the caller.
