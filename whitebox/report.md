@@ -37,6 +37,9 @@
 | `test_doubles_speeding` | Roll 3 doubles in a row | `doubles_streak` state | Tests the speeding to jail loop and exit conditions. | Player moved and resolved tile on the 3rd double before going to jail! |
 | `test_game_winner_logic` | Compare two players' net worth | Game end variables | Ensures the final game evaluation picks the highest score. | Used `min()` instead of `max()`, making the poorest player win! |
 | `test_player_net_worth` | Tally mortgaged, unmortgaged, and cash | `properties` branch | Determines if property values (active and mortgaged) augment net worth. | Net worth only returned raw balance instead of including property value! |
+| `test_ui_safe_int_input_eof` | Unexpected EOF input | `EOFError` edge case | Validates UI wrapper handles ungraceful CLI exits. | `input()` crashed on EOF instead of returning default. |
+| `test_auction_non_integer_bid` | Non-integer bid in auction | Invalid Input | Tests the auction loop resilience. | `int()` cast crashed on unexpected strings instead of safe handling. |
+| `test_trade_negative_cash` | Asking negative cash | Negative numbers | Tests the trade menu limits. | Prompt didn't prevent negative cash, causing validation crashes in balances. |
 
 ### Corrected Errors (Commits)
 - Error 1: Fixed `give_loan` in `bank.py` not deducting from bank reserves.
@@ -47,3 +50,4 @@
 - Error 6: Fixed `buy_property` in `game.py` rejecting purchase when player has exactly the property price.
 - Error 7: Fixed `game.py` awarding the win to the player with the minimum net worth instead of maximum.
 - Error 8: Fixed `player.net_worth` computing logic to correctly include mortgaged and unmortgaged property assets.
+- Error 9, 10, 11: Fixed auction non-integer crashes, trade negative cash crashes, and UI EOF crashes.
