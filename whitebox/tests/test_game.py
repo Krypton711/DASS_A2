@@ -29,11 +29,11 @@ def test_doubles_speeding():
     game = Game(["P1", "P2"])
     player = game.players[0]
     
-    # Provider 3 pairs of doubles for P1
     with patch('random.randint', side_effect=[1,1, 2,2, 3,3]):
-        with patch('builtins.input', return_value='s'):
-            # This causes loop in play_turn to strike 3 doubles
-            game.play_turn()
+        with patch('moneypoly.game.Game.interactive_menu'):
+            with patch('builtins.input', return_value='s'):
+                # This causes loop in play_turn to strike 3 doubles
+                game.play_turn()
             
     assert player.in_jail is True
     assert player.position == 10
