@@ -7,13 +7,49 @@ class Player:
     def __init__(self, name, balance=STARTING_BALANCE):
         self.name = name
         self.balance = balance
-        self.position = 0
         self.properties = []
-        self.in_jail = False
-        self.jail_turns = 0
-        self.get_out_of_jail_cards = 0
-        self.is_eliminated = False
+        self._state = {
+            "position": 0,
+            "in_jail": False,
+            "jail_turns": 0,
+            "jail_cards": 0
+        }
 
+    @property
+    def position(self):
+        """Get player position."""
+        return self._state["position"]
+
+    @position.setter
+    def position(self, value):
+        self._state["position"] = value
+
+    @property
+    def in_jail(self):
+        """Get jail status."""
+        return self._state["in_jail"]
+
+    @in_jail.setter
+    def in_jail(self, value):
+        self._state["in_jail"] = value
+
+    @property
+    def jail_turns(self):
+        """Get jail turns."""
+        return self._state["jail_turns"]
+
+    @jail_turns.setter
+    def jail_turns(self, value):
+        self._state["jail_turns"] = value
+
+    @property
+    def get_out_of_jail_cards(self):
+        """Get out of jail cards count."""
+        return self._state["jail_cards"]
+
+    @get_out_of_jail_cards.setter
+    def get_out_of_jail_cards(self, value):
+        self._state["jail_cards"] = value
 
     def add_money(self, amount):
         """Add funds to this player's balance. Amount must be non-negative."""
