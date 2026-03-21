@@ -46,3 +46,22 @@
   - Body: `{"label": "OFFICE", "street": "Street 2", "city": "City", "pincode": "222222", "is_default": true}` *(Called after another address was already set to default)*
 - **Expected result**: The newly created address should be the unique default, and all pre-existing addresses marked `is_default: true` should have it set to `false`.
 - **Actual result observed**: The historical address retained its `is_default: true` flag, creating conflicting defaults in the database.
+
+**Bug 4: Cart Subtotal Integer Overflow**
+- **Endpoint tested**: `GET /api/v1/cart`
+- **Request payload**:
+  - Method: `POST` Add Item (Price 120, Quantity 2), then `GET` Cart
+  - URL: `http://localhost:8080/api/v1/cart`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+- **Expected result**: Mathematical accuracy. Subtotal should read `240` (120 * 2).
+- **Actual result observed**: Subtotal returned as `-16`. The internal server logic suffers from Signed 8-bit Integer Overflow, preventing proper calculation.
+
+**Bug 5: Cart Accepts Zero and Negative Quantities**
+- **Endpoint tested**: `POST /api/v1/cart/add`
+- **Request payload**:
+  - Method: `POST`
+  - URL: `http://localhost:8080/api/v1/cart/add`
+  - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
+  - Body: `{"product_id": 1, "quantity": 0}` (Also tested `-5`)
+- **Expected result**: Status `400 Bad Request` based on API rule "When adding an item, the quantity must be at least 1. Sending 0 or a negative number must be rejected."
+- **Actual result observed**: Status `200 OK`. Internal validation limits missing entirely on addition quantities.
