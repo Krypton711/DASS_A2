@@ -141,3 +141,12 @@
   - Headers: `{'X-Roll-Number': '<your_roll_number>', 'X-User-ID': '1'}`
 - **Expected result**: Status `200 OK` or structural rule validation responses.
 - **Actual result observed**: Status `404 Not Found`. The Support Tickets logic mapping is absent from the API.
+
+**Bug 14: Global Authentication Missing (X-Roll-Number & X-User-ID Bounds Ignored)**
+- **Endpoint tested**: `All endpoints across the system matrix.`
+- **Request payload**:
+  - Method: `GET`, `POST`, `PUT`, `DELETE`
+  - URL: `http://localhost:8080/api/v1/*`
+  - Headers: `Missing entirely`, or given `string data` (e.g., `'abc'`)
+- **Expected result**: Status `401 Unauthorized` for missing roll-numbers. Status `400 Bad Request` for missing/string User-IDs and type violations.
+- **Actual result observed**: The API ignored these constraints universally. Requests processed as 500 crashes or processed as 200 OKs arbitrarily depending on downstream code logic, completely shattering the `401/400` boundaries specified.
