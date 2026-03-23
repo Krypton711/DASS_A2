@@ -76,3 +76,23 @@ def test_cart_add_exceeds_stock(base_url, headers, product, empty_cart):
     payload = {"product_id": p_id, "quantity": 99999999}
     res = requests.post(f"{base_url}/cart/add", headers=headers, json=payload)
     assert res.status_code == 400
+def test_cart_update_missing_product(base_url, headers):
+    res = requests.put(f"{base_url}/cart/update", headers=headers, json={"product_id": 99999, "quantity": 2})
+    assert res.status_code in [400, 404]
+
+def test_cart_update_invalid_quantity_type(base_url, headers):
+    res = requests.put(f"{base_url}/cart/update", headers=headers, json={"product_id": 1, "quantity": "two"})
+    assert res.status_code in [400, 422]
+
+def test_cart_clear_empty(base_url, headers):
+    requests.delete(f"{base_url}/cart/clear", headers=headers)
+    res = requests.delete(f"{base_url}/cart/clear", headers=headers)
+    assert res.status_code in [200, 204] # Idempotent clearance is valid
+
+def test_cart_add_string_product_id(base_url, headers):
+    res = requests.post(f"{base_url}/cart/add", headers=headers, json={"product_id": "apple", "quantity": 1})
+    assert res.status_code in [400, 422]
+
+def test_cart_add_missing_json(base_url, headers):
+    res = requests.post(f"{base_url}/cart/add", headers=headers, json={})
+    assert res.status_code in [400, 422]

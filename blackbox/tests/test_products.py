@@ -61,3 +61,22 @@ def test_get_products_sort_price_up(base_url, headers):
     # Simply validating the param doesn't panic the endpoint. Precise ordering validation depends on API param structure which is undocumented, but common is ?sort=price.
     res = requests.get(f"{base_url}/products?sort=price", headers=headers)
     assert res.status_code == 200
+def test_get_products_invalid_sort(base_url, headers):
+    res = requests.get(f"{base_url}/products?sort=DROP_TABLE", headers=headers)
+    assert res.status_code < 500
+
+def test_get_products_sql_injection_search(base_url, headers):
+    res = requests.get(f"{base_url}/products?search=' OR 1=1 --", headers=headers)
+    assert res.status_code < 500
+
+def test_get_products_invalid_order(base_url, headers):
+    res = requests.get(f"{base_url}/products?sort=price&order=RANDOM_TEXT", headers=headers)
+    assert res.status_code < 500
+
+def test_get_product_string_id(base_url, headers):
+    res = requests.get(f"{base_url}/products/invalid_id", headers=headers)
+    assert res.status_code in [400, 404]
+
+def test_get_products_extreme_pagination(base_url, headers):
+    res = requests.get(f"{base_url}/products?page=99999999&limit=99999999", headers=headers)
+    assert res.status_code < 500

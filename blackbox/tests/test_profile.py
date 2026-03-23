@@ -74,3 +74,24 @@ def test_put_profile_missing_field(base_url, headers):
     payload = {"phone": "1234567890"}
     resp = requests.put(f"{base_url}/profile", headers=headers, json=payload)
     assert resp.status_code == 400
+def test_put_profile_extra_fields(base_url, headers):
+    payload = {"name": "Valid", "phone": "1234567890", "is_admin": True, "balance": 9999}
+    res = requests.put(f"{base_url}/profile", headers=headers, json=payload)
+    assert res.status_code < 500
+
+def test_put_profile_boolean_types(base_url, headers):
+    payload = {"name": True, "phone": False}
+    assert requests.put(f"{base_url}/profile", headers=headers, json=payload).status_code in [400, 422]
+
+def test_put_profile_empty_json(base_url, headers):
+    assert requests.put(f"{base_url}/profile", headers=headers, json={}).status_code in [400, 422]
+
+def test_put_profile_sql_injection(base_url, headers):
+    payload = {"name": "' OR 1=1 --", "phone": "1234567890"}
+    res = requests.put(f"{base_url}/profile", headers=headers, json=payload)
+    assert res.status_code < 500
+
+def test_get_profile_sql_injection_headers(base_url, headers):
+    h = headers.copy()
+    h["X-User-ID"] = "' DROP TABLE users; --"
+    assert requests.get(f"{base_url}/profile", headers=h).status_code in [400, 401]
