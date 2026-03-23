@@ -12,6 +12,7 @@
 | Iteration 3: Formatting and syntax | Added trailing newlines to player.py and game.py. Removed unnecessary parens in game.py and reformatted dictionaries in cards.py to avoid long lines. |
 | Iteration 4: Logical and best practices | Replaced bare except in ui.py, fixed truthiness comparison in board.py, removed unnecessary else in property.py, fixed redundant f-string and elif in game.py. |
 | Iteration 5: Refactoring | Fixed W0201 by moving `doubles_streak` inside `__init__` in `dice.py`. Fixed `too-many-instance-attributes (R0902)` by grouping attributes into a `_state` dict in `player.py`, replacing `mortgage_value` with a `@property` in `property.py`, and combining decks into a `decks` dict in `game.py`. Replaced long if/elif branch structure with a method dispatch table in `game.py` to fix `too-many-branches`. |
+| Iteration 6: Namespaces and Formatting | Added `__init__.py` to `moneypoly` to establish package scope solving `E0401` import errors, and stripped trailing whitespaces in `game.py` to solve `C0303`. |
 
 ## 1.3 White Box Test Cases
 
