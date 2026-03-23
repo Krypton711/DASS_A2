@@ -29,3 +29,19 @@ def test_create_ticket_empty_strings(base_url, headers):
 
 def test_create_ticket_wrong_types(base_url, headers):
     assert requests.post(f"{base_url}/tickets/create", headers=headers, json={"subject": True, "description": False}).status_code in [400, 404, 422]
+
+def test_create_ticket_extremely_long_subject(base_url, headers):
+    res = requests.post(f"{base_url}/tickets/create", headers=headers, json={"subject": "A" * 10000, "description": "Help"})
+    assert res.status_code < 500
+
+def test_get_tickets_sql_injection_header(base_url, headers):
+    h = headers.copy()
+    h["X-User-ID"] = "' OR 1=1 --"
+    assert requests.get(f"{base_url}/tickets", headers=h).status_code in [400, 401, 404]
+
+def test_add_review_extreme_length_text(base_url, headers):
+    res = requests.post(f"{base_url}/products/1/reviews/add", headers=headers, json={"rating": 5, "review_text": "B" * 20000})
+    assert res.status_code < 500
+
+def test_delete_address_missing_header(base_url):
+    assert requests.delete(f"{base_url}/addresses/1").status_code in [400, 401, 403, 404]
