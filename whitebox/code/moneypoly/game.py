@@ -124,7 +124,7 @@ class Game:
             print(f"  {prop.name} is unowned — asking price ${prop.price}.")
             while True:
                 choice = input("  Buy (b), Auction (a), Manage (m), or Skip (s)? ").strip().lower()
-                
+
                 if choice == "m":
                     print("  --- Opening Financial Menu ---")
                     self._menu_mortgage(player)
@@ -150,7 +150,7 @@ class Game:
         if player.balance < prop.price:
             print(f"  {player.name} cannot afford {prop.name} (${prop.price}).")
             return False
-        
+
         player.deduct_money(prop.price)
         player.add_property(prop)
         prop.owner = player
